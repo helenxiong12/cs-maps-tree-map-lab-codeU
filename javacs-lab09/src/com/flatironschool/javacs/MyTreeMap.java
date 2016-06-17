@@ -105,9 +105,23 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 		return target.equals(obj);
 	}
 
+	private boolean containsSearch(Object target, Node n) {
+		if (equals(n.value, target)) {
+			return true;
+		} else if (containsSearch(target, n.left)) {
+			return true;
+		} else if (containsSearch(target, n.right)) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
 	@Override
 	public boolean containsValue(Object target) {
-		return false;
+		return containsSearch(target, root);
+//		return false;
 	}
 
 	@Override
