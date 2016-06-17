@@ -61,6 +61,23 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 	 * 
 	 * @param target
 	 */
+	
+	private Node searchChild(Comparable<? super K> target, Node root) {
+		if (equals(target, root.key)) {
+			return root;
+		} else if (target.compareTo(root.key) < 0 && equals(root.left, null) == false) {
+			//search left
+			root = root.left;
+			return searchChild(target, root);
+		} else if (target.compareTo(root.key) > 0 && equals(root.right, null) == false) {
+			//search right
+			root = root.right;
+			return searchChild(target, root);
+		} else {
+			return null;
+		}
+	}
+	
 	private Node findNode(Object target) {
 		// some implementations can handle null as a key, but not this one
 		if (target == null) {
@@ -70,10 +87,8 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 		// something to make the compiler happy
 		@SuppressWarnings("unchecked")
 		Comparable<? super K> k = (Comparable<? super K>) target;
-		
-		// the actual search
-        // TODO: Fill this in.
-        return null;
+		// int cmp = k.compareTo(p.key);
+		return searchChild(k, root);
 	}
 
 	/**
