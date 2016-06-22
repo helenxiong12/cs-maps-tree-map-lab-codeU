@@ -106,22 +106,21 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 	}
 
 	private boolean containsSearch(Object target, Node n) {
+		System.out.println(target + " " + n.value);
 		if (equals(n.value, target)) {
 			return true;
-		} else if (containsSearch(target, n.left)) {
+		} else if ((n.left == null) == false && containsSearch(target, n.left)) {
 			return true;
-		} else if (containsSearch(target, n.right)) {
+		} else if ((n.right == null) == false && containsSearch(target, n.right)) {
 			return true;
 		} else {
 			return false;
 		}
-
 	}
 
 	@Override
 	public boolean containsValue(Object target) {
 		return containsSearch(target, root);
-//		return false;
 	}
 
 	@Override
@@ -143,19 +142,29 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 		return size == 0;
 	}
 
+	private void keySetHelper(Set<K> set, Node root) {
+		if (equals(root, null)) return;
+		keySetHelper(set, root.left);
+		set.add(root.key);
+		keySetHelper(set, root.right);
+		return;
+	}
+
 	@Override
 	public Set<K> keySet() {
 		Set<K> set = new LinkedHashSet<K>();
-        // TODO: Fill this in.
+		keySetHelper(set, root);
 		return set;
 	}
 
 	@Override
 	public V put(K key, V value) {
 		if (key == null) {
+			//System.out.println("null exception");
 			throw new NullPointerException();
 		}
 		if (root == null) {
+			//System.out.println("null root");
 			root = new Node(key, value);
 			size++;
 			return null;
@@ -164,8 +173,36 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 	}
 
 	private V putHelper(Node node, K key, V value) {
-        // TODO: Fill this in.
-        return null;
+		System.out.print("putting values ");
+		System.out.print(key + " " + value + " ");
+		System.out.println(node.key + " " + node.value);
+		//go to where the key should be - traverse the tree
+        	Comparable<? super K> obj = (Comparable<? super K>) key;
+        	int comp = obj.compareTo(node.key);
+        	if (comp < 0) { 
+        		//if new key is less than current key, go left
+        		if (equals(null, node.left) == false) { //if it has a left key
+        			return putHelper(node.left, key, value);
+        		} else {
+        			node.left = new Node(key, value);
+        			size++;
+        			return null;
+        		}
+        	} else if (comp > 0) {
+        		if (equals(null, node.right) == false) {
+        			return putHelper(node.right, key, value);
+        		} else {
+        			node.right = new Node(key, value);
+        			size++;
+        			return null;
+        		}	
+        	} else /*(comp == 0)*/ {
+        		//System.out.println("here");
+        		//key already exists add new value
+		       	V oldValue = node.value;
+		       	node.value = value;
+		       	return oldValue;
+        	}
 	}
 
 	@Override
