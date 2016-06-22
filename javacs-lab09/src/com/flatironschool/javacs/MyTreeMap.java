@@ -106,7 +106,6 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 	}
 
 	private boolean containsSearch(Object target, Node n) {
-		System.out.println(target + " " + n.value);
 		if (equals(n.value, target)) {
 			return true;
 		} else if ((n.left == null) == false && containsSearch(target, n.left)) {
@@ -160,11 +159,9 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 	@Override
 	public V put(K key, V value) {
 		if (key == null) {
-			//System.out.println("null exception");
 			throw new NullPointerException();
 		}
 		if (root == null) {
-			//System.out.println("null root");
 			root = new Node(key, value);
 			size++;
 			return null;
@@ -173,9 +170,6 @@ public class MyTreeMap<K, V> implements Map<K, V> {
 	}
 
 	private V putHelper(Node node, K key, V value) {
-		System.out.print("putting values ");
-		System.out.print(key + " " + value + " ");
-		System.out.println(node.key + " " + node.value);
 		//go to where the key should be - traverse the tree
         	Comparable<? super K> obj = (Comparable<? super K>) key;
         	int comp = obj.compareTo(node.key);
@@ -197,7 +191,6 @@ public class MyTreeMap<K, V> implements Map<K, V> {
         			return null;
         		}	
         	} else /*(comp == 0)*/ {
-        		//System.out.println("here");
         		//key already exists add new value
 		       	V oldValue = node.value;
 		       	node.value = value;
